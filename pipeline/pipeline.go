@@ -58,16 +58,16 @@ func (p *Pipeline) Step(recv, trns int64) []byte {
 			p.trns_rates_series[r].Record(trns_rate)
 			p.recv_rates_series[r].Record(recv_rate)
 
-			trns_name := fmt.Sprintf("node_network_transmit_bytes_rate_%ds", r)
-			recv_name := fmt.Sprintf("node_network_receive_bytes_rate_%ds",  r)
+			trns_name := fmt.Sprintf("netexp_transmit_rate_%ds_bps", r)
+			recv_name := fmt.Sprintf("netexp_receive_rate_%ds_bps",  r)
 			register(trns_name, trns_rate)
 			register(recv_name, recv_rate)
 		}
 
 		for _, m := range p.ranges {
 			if m > r && p.trns_rates_series[r].Length() >= m {
-				trns_name := fmt.Sprintf("node_network_transmit_bytes_rate_%ds_max_%ds", r, m)
-				recv_name := fmt.Sprintf("node_network_receive_bytes_rate_%ds_max_%ds",  r, m)
+				trns_name := fmt.Sprintf("netexp_transmit_rate_%ds_max_%ds_bps", r, m)
+				recv_name := fmt.Sprintf("netexp_receive_rate_%ds_max_%ds_bps",  r, m)
 				register(trns_name, math.Max(p.trns_rates_series[r].Samples, m))
 				register(recv_name, math.Max(p.recv_rates_series[r].Samples, m))
 			}

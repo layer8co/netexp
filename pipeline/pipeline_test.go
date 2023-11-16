@@ -32,23 +32,23 @@ func TestPipeline(t *testing.T) {
 				{ 90, 91 }, // rate_3s:  6,  5
 			},
 			[]string{
-				"node_network_receive_bytes_rate_1s 2",
-				"node_network_transmit_bytes_rate_1s 6",
+				"netexp_receive_rate_1s_bps 2",
+				"netexp_transmit_rate_1s_bps 6",
 
-				"node_network_receive_bytes_rate_3s 6",
-				"node_network_transmit_bytes_rate_3s 5",
+				"netexp_receive_rate_3s_bps 6",
+				"netexp_transmit_rate_3s_bps 5",
 
-				"node_network_receive_bytes_rate_5s 11",
-				"node_network_transmit_bytes_rate_5s 16",
+				"netexp_receive_rate_5s_bps 11",
+				"netexp_transmit_rate_5s_bps 16",
 
-				"node_network_receive_bytes_rate_1s_max_3s 11",
-				"node_network_transmit_bytes_rate_1s_max_3s 6",
+				"netexp_receive_rate_1s_max_3s_bps 11",
+				"netexp_transmit_rate_1s_max_3s_bps 6",
 
-				"node_network_receive_bytes_rate_1s_max_5s 27",
-				"node_network_transmit_bytes_rate_1s_max_5s 44",
+				"netexp_receive_rate_1s_max_5s_bps 27",
+				"netexp_transmit_rate_1s_max_5s_bps 44",
 
-				"node_network_receive_bytes_rate_3s_max_5s 22",
-				"node_network_transmit_bytes_rate_3s_max_5s 24",
+				"netexp_receive_rate_3s_max_5s_bps 22",
+				"netexp_transmit_rate_3s_max_5s_bps 24",
 			},
 		},
 		{
@@ -63,20 +63,20 @@ func TestPipeline(t *testing.T) {
 				{ 90, 91 }, // rate_3s:  6,  5
 			},
 			[]string{
-				"node_network_receive_bytes_rate_1s 2",
-				"node_network_transmit_bytes_rate_1s 6",
+				"netexp_receive_rate_1s_bps 2",
+				"netexp_transmit_rate_1s_bps 6",
 
-				"node_network_receive_bytes_rate_3s 6",
-				"node_network_transmit_bytes_rate_3s 5",
+				"netexp_receive_rate_3s_bps 6",
+				"netexp_transmit_rate_3s_bps 5",
 
-				"node_network_receive_bytes_rate_5s 11",
-				"node_network_transmit_bytes_rate_5s 16",
+				"netexp_receive_rate_5s_bps 11",
+				"netexp_transmit_rate_5s_bps 16",
 
-				"node_network_receive_bytes_rate_1s_max_3s 11",
-				"node_network_transmit_bytes_rate_1s_max_3s 6",
+				"netexp_receive_rate_1s_max_3s_bps 11",
+				"netexp_transmit_rate_1s_max_3s_bps 6",
 
-				"node_network_receive_bytes_rate_1s_max_5s 27",
-				"node_network_transmit_bytes_rate_1s_max_5s 44",
+				"netexp_receive_rate_1s_max_5s_bps 27",
+				"netexp_transmit_rate_1s_max_5s_bps 44",
 			},
 		},
 	}
