@@ -2,26 +2,50 @@ package main
 
 import (
 	"fmt"
+	"flag"
 	"time"
 	"net/http"
 	"netexp/pipeline"
 	"netexp/netdev"
 )
 
-type Metric struct {
-	Name string
-	Data int64
-}
+var (
+	version = "0.2.0"
+	metrics []byte
+	bind string
+)
 
 func main() {
-	var metrics []byte
+	flag.StringVar(&bind, "bind", ":9298", "network address to listen on")
+	printver := flag.Bool("version", false, "print version and exit")
 
+	flag.Parse()
+
+	if *printver {
+		fmt.Println(version)
+		return
+	}
+
+	serve()
+	gather()
+}
+
+func serve() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){
 		w.Write(metrics)
 	})
 
-	go http.ListenAndServe(":9098", nil)
+	go func() {
+		err := http.ListenAndServe(bind, nil)
+		if err != nil {
+			panic(fmt.Errorf("could not serve http: %w", err))
+		}
+	}()
 
+	fmt.Printf("listening on %s\n", bind)
+}
+
+func gather() {
 	p := pipeline.New([]int{ 1, 5, 10, 15, 30, 60 })
 
 	for {
