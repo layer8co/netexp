@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	version = "0.3.7"
+	version = "0.3.8"
 	metrics []byte
 	bind string
 )
