@@ -1,6 +1,6 @@
 package netdev
 
-import(
+import (
 	"os"
 	"fmt"
 	"strings"
