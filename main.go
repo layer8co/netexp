@@ -32,7 +32,7 @@ func main() {
 
 func serve() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){
-		w.Write([]byte("netexp " + version))
+		w.Write([]byte("netexp " + version + "\n"))
 	})
 
 	http.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request){
