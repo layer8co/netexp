@@ -12,11 +12,11 @@ import (
 var (
 	version = "0.3.8"
 	metrics []byte
-	bind string
+	listen string
 )
 
 func main() {
-	flag.StringVar(&bind, "bind", ":9298", "network address to listen on")
+	flag.StringVar(&listen, "listen", ":9298", "network address to listen on")
 	printver := flag.Bool("version", false, "print version and exit")
 
 	flag.Parse()
@@ -40,13 +40,13 @@ func serve() {
 	})
 
 	go func() {
-		err := http.ListenAndServe(bind, nil)
+		err := http.ListenAndServe(listen, nil)
 		if err != nil {
 			panic(fmt.Errorf("could not serve http: %w", err))
 		}
 	}()
 
-	fmt.Printf("listening on %s\n", bind)
+	fmt.Printf("listening on %s\n", listen)
 }
 
 func gather() {
