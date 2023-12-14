@@ -17,7 +17,7 @@ RUN go build -trimpath -ldflags '-s -w -buildid='
 
 # main image
 
-FROM --platform=$TARGETPLATFORM alpine:3.18.4
+FROM --platform=$TARGETPLATFORM alpine:3.19
 
 RUN apk add --update --no-cache tini
 
