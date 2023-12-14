@@ -1,4 +1,6 @@
-# build
+# ===============
+# = build image
+# ===============
 
 FROM --platform=$BUILDPLATFORM golang:alpine AS build
 
@@ -15,14 +17,14 @@ ARG CGO_ENABLED=0
 RUN go test -v ./...
 RUN go build -trimpath -ldflags '-s -w -buildid='
 
-# main image
+# ===============
+# = main image
+# ===============
 
 FROM --platform=$TARGETPLATFORM alpine:3.19
 
 RUN apk add --update --no-cache tini
-
 COPY --from=build /src/netexp /usr/local/bin/netexp
-
 ENTRYPOINT [ "tini", "--", "netexp" ]
 
 COPY --chmod=755 <<-'EOF' /healthcheck.sh
