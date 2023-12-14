@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"fmt"
 	"flag"
 	"time"
@@ -17,8 +18,15 @@ var (
 )
 
 func main() {
+	// get options from flags
 	flag.StringVar(&listen, "listen", ":9298", "network address to listen on")
 	flag.BoolVar(&getver, "version", false, "print version and exit")
+
+	// get options from env vars
+	env := os.Getenv("NETEXP_LISTEN")
+	if env != "" {
+		listen = env
+	}
 
 	flag.Parse()
 
