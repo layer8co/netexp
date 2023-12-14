@@ -13,15 +13,16 @@ var (
 	version = "0.3.8"
 	metrics []byte
 	listen string
+	getver bool
 )
 
 func main() {
 	flag.StringVar(&listen, "listen", ":9298", "network address to listen on")
-	printver := flag.Bool("version", false, "print version and exit")
+	flag.BoolVar(&getver, "version", false, "print version and exit")
 
 	flag.Parse()
 
-	if *printver {
+	if getver {
 		fmt.Println(version)
 		return
 	}
