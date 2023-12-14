@@ -1,6 +1,6 @@
 # build and publish the project's docker image
 
-name: Docker Images
+name: Docker Build
 
 on:
   create:
