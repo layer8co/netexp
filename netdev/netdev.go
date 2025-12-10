@@ -1,11 +1,11 @@
 package netdev
 
 import (
-	"os"
 	"fmt"
-	"strings"
-	"strconv"
+	"os"
 	"regexp"
+	"strconv"
+	"strings"
 )
 
 func ReadNetDev() ([]byte, error) {
@@ -26,7 +26,7 @@ func GetTraffic(netdev []byte) (int64, int64, error) {
 		}
 
 		f := strings.Fields(line)
-		iface       := f[0]
+		iface := f[0]
 		recv_string := f[1]
 		trns_string := f[9]
 
@@ -39,8 +39,8 @@ func GetTraffic(netdev []byte) (int64, int64, error) {
 		if err != nil {
 			return 0, 0, fmt.Errorf("could not do regexp matching: %w", err)
 		}
-		if ! match {
-			continue;
+		if !match {
+			continue
 		}
 
 		x, err := strconv.ParseInt(recv_string, 10, 64)

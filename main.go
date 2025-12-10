@@ -1,20 +1,20 @@
 package main
 
 import (
-	"os"
-	"fmt"
 	"flag"
-	"time"
+	"fmt"
 	"net/http"
-	"netexp/pipeline"
 	"netexp/netdev"
+	"netexp/pipeline"
+	"os"
+	"time"
 )
 
 var (
 	version = "0.3.8"
 	metrics []byte
-	listen string
-	getver bool
+	listen  string
+	getver  bool
 )
 
 func main() {
@@ -40,11 +40,11 @@ func main() {
 }
 
 func serve() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("netexp " + version + "\n"))
 	})
 
-	http.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request){
+	http.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
 		w.Write(metrics)
 	})
 
@@ -59,7 +59,7 @@ func serve() {
 }
 
 func gather() {
-	p := pipeline.New([]int{ 1, 5, 10, 15, 30, 60 })
+	p := pipeline.New([]int{1, 5, 10, 15, 30, 60})
 
 	for {
 		data, err := netdev.ReadNetDev()
