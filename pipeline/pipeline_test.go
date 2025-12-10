@@ -1,11 +1,11 @@
 package pipeline_test
 
 import (
-	"sort"
-	"strings"
-	"strconv"
-	"testing"
 	"netexp/pipeline"
+	"sort"
+	"strconv"
+	"strings"
+	"testing"
 )
 
 type data struct {
@@ -14,22 +14,22 @@ type data struct {
 }
 
 func TestPipeline(t *testing.T) {
-	tests := []struct{
+	tests := []struct {
 		ranges []int
-		data []data
-		want []string
+		data   []data
+		want   []string
 	}{
 		{
-			[]int{ 1, 3, 5 },
+			[]int{1, 3, 5},
 			[]data{
-				{ 1,   2 },
-				{ 5,   3 },
-				{ 35, 11 },
-				{ 45, 32 }, // rate_3s: 14, 10
-				{ 72, 76 }, // rate_3s: 22, 24
-				{ 83, 80 }, // rate_3s: 16, 23
-				{ 88, 85 }, // rate_3s: 14, 17
-				{ 90, 91 }, // rate_3s:  6,  5
+				{1, 2},
+				{5, 3},
+				{35, 11},
+				{45, 32}, // rate_3s: 14, 10
+				{72, 76}, // rate_3s: 22, 24
+				{83, 80}, // rate_3s: 16, 23
+				{88, 85}, // rate_3s: 14, 17
+				{90, 91}, // rate_3s:  6,  5
 			},
 			[]string{
 				"netexp_receive_rate_1s_bps 2",
@@ -52,15 +52,15 @@ func TestPipeline(t *testing.T) {
 			},
 		},
 		{
-			[]int{ 1, 3, 5 },
+			[]int{1, 3, 5},
 			[]data{
-				{ 5,   3 },
-				{ 35, 11 },
-				{ 45, 32 },
-				{ 72, 76 }, // rate_3s: 22, 24
-				{ 83, 80 }, // rate_3s: 16, 23
-				{ 88, 85 }, // rate_3s: 14, 17
-				{ 90, 91 }, // rate_3s:  6,  5
+				{5, 3},
+				{35, 11},
+				{45, 32},
+				{72, 76}, // rate_3s: 22, 24
+				{83, 80}, // rate_3s: 16, 23
+				{88, 85}, // rate_3s: 14, 17
+				{90, 91}, // rate_3s:  6,  5
 			},
 			[]string{
 				"netexp_receive_rate_1s_bps 2",

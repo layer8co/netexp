@@ -1,9 +1,9 @@
 package series_test
 
 import (
-	"testing"
 	"netexp/series"
 	"strconv"
+	"testing"
 )
 
 func TestRecord(t *testing.T) {
@@ -14,7 +14,7 @@ func TestRecord(t *testing.T) {
 		ts.Record(i)
 	}
 
-	got := ts.Samples[len(ts.Samples) - 1]
+	got := ts.Samples[len(ts.Samples)-1]
 	want := 20
 
 	if got != want {
@@ -83,7 +83,7 @@ func TestMap(t *testing.T) {
 	}
 	newts := series.Map(ts, tostring)
 
-	got := newts.Samples[len(newts.Samples) - 1]
+	got := newts.Samples[len(newts.Samples)-1]
 	want := "20"
 
 	if got != want {

@@ -2,7 +2,7 @@ package series
 
 type Series[T any] struct {
 	Samples []T
-	Keep int
+	Keep    int
 }
 
 func New[T any](keep int) *Series[T] {
@@ -14,7 +14,7 @@ func New[T any](keep int) *Series[T] {
 func (t *Series[T]) Record(sample T) {
 	t.Samples = append(t.Samples, sample)
 	if t.Length() > t.Keep {
-		t.Samples = t.Samples[t.Length() - t.Keep :]
+		t.Samples = t.Samples[t.Length()-t.Keep:]
 	}
 }
 
@@ -23,11 +23,11 @@ func (t *Series[T]) Length() int {
 }
 
 func (t *Series[T]) Last(n int) T {
-	return t.Samples[t.Length() - n]
+	return t.Samples[t.Length()-n]
 }
 
 func (t *Series[T]) Head(n int) []T {
-	return t.Samples[t.Length() - n :]
+	return t.Samples[t.Length()-n:]
 }
 
 func Map[A, B any](src *Series[A], fn func(A) B) *Series[B] {
@@ -37,6 +37,6 @@ func Map[A, B any](src *Series[A], fn func(A) B) *Series[B] {
 	}
 	return &Series[B]{
 		Samples: b_samples,
-		Keep: src.Keep,
+		Keep:    src.Keep,
 	}
 }

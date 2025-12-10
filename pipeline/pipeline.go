@@ -2,14 +2,14 @@ package pipeline
 
 import (
 	"fmt"
-	"netexp/series"
 	"netexp/math"
+	"netexp/series"
 )
 
 type Pipeline struct {
-	ranges []int
-	trns_series *series.Series[int64]
-	recv_series *series.Series[int64]
+	ranges            []int
+	trns_series       *series.Series[int64]
+	recv_series       *series.Series[int64]
 	trns_rates_series map[int]*series.Series[int64]
 	recv_rates_series map[int]*series.Series[int64]
 }
@@ -51,15 +51,15 @@ func (p *Pipeline) Step(recv, trns int64) []byte {
 	p.trns_series.Record(trns)
 
 	for _, r := range p.ranges {
-		if p.trns_series.Length() >= r + 1 {
-			trns_rate := math.Rate(p.trns_series.Samples, r + 1)
-			recv_rate := math.Rate(p.recv_series.Samples, r + 1)
+		if p.trns_series.Length() >= r+1 {
+			trns_rate := math.Rate(p.trns_series.Samples, r+1)
+			recv_rate := math.Rate(p.recv_series.Samples, r+1)
 
 			p.trns_rates_series[r].Record(trns_rate)
 			p.recv_rates_series[r].Record(recv_rate)
 
 			trns_name := fmt.Sprintf("netexp_transmit_rate_%ds_bps", r)
-			recv_name := fmt.Sprintf("netexp_receive_rate_%ds_bps",  r)
+			recv_name := fmt.Sprintf("netexp_receive_rate_%ds_bps", r)
 			register(trns_name, trns_rate)
 			register(recv_name, recv_rate)
 		}
@@ -67,7 +67,7 @@ func (p *Pipeline) Step(recv, trns int64) []byte {
 		for _, m := range p.ranges {
 			if m > r && p.trns_rates_series[r].Length() >= m {
 				trns_name := fmt.Sprintf("netexp_transmit_rate_%ds_max_%ds_bps", r, m)
-				recv_name := fmt.Sprintf("netexp_receive_rate_%ds_max_%ds_bps",  r, m)
+				recv_name := fmt.Sprintf("netexp_receive_rate_%ds_max_%ds_bps", r, m)
 				register(trns_name, math.Max(p.trns_rates_series[r].Samples, m))
 				register(recv_name, math.Max(p.recv_rates_series[r].Samples, m))
 			}
