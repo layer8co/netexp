@@ -51,6 +51,7 @@ func (p *Pipeline) Step(recv, trns int64) []byte {
 	p.trns_series.Record(trns)
 
 	for _, r := range p.ranges {
+		// Check if there exists enough sample data for the current duration range 'r'
 		if p.trns_series.Length() >= r+1 {
 			trns_rate := math.Rate(p.trns_series.Samples, r+1)
 			recv_rate := math.Rate(p.recv_series.Samples, r+1)

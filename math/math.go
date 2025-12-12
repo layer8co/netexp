@@ -11,6 +11,8 @@ func Max(series []int64, head int) int64 {
 	return max
 }
 
+// Gives us how much the "series" has changed over the last duration
+// range "head". Scaled down to each second.
 func Rate(series []int64, head int) int64 {
 	l := len(series)
 	return (series[l-1] - series[l-head]) / int64(head-1)
