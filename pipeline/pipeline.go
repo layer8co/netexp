@@ -2,7 +2,6 @@ package pipeline
 
 import (
 	"fmt"
-	"netexp/math"
 	"netexp/series"
 )
 
@@ -53,8 +52,8 @@ func (p *Pipeline) Step(recv, trns int64) []byte {
 	for _, r := range p.ranges {
 		// Check if there exists enough sample data for the current duration range 'r'
 		if p.trns_series.Length() >= r+1 {
-			trns_rate := math.Rate(p.trns_series.Samples, r+1)
-			recv_rate := math.Rate(p.recv_series.Samples, r+1)
+			trns_rate := series.Rate(p.trns_series.Samples, r+1)
+			recv_rate := series.Rate(p.recv_series.Samples, r+1)
 
 			p.trns_rates_series[r].Record(trns_rate)
 			p.recv_rates_series[r].Record(recv_rate)
@@ -69,8 +68,8 @@ func (p *Pipeline) Step(recv, trns int64) []byte {
 			if m > r && p.trns_rates_series[r].Length() >= m {
 				trns_name := fmt.Sprintf("netexp_transmit_rate_%ds_max_%ds_bps", r, m)
 				recv_name := fmt.Sprintf("netexp_receive_rate_%ds_max_%ds_bps", r, m)
-				register(trns_name, math.Max(p.trns_rates_series[r].Samples, m))
-				register(recv_name, math.Max(p.recv_rates_series[r].Samples, m))
+				register(trns_name, series.Max(p.trns_rates_series[r].Samples, m))
+				register(recv_name, series.Max(p.recv_rates_series[r].Samples, m))
 			}
 		}
 	}
