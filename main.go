@@ -7,14 +7,19 @@ import (
 	"netexp/netdev"
 	"netexp/pipeline"
 	"os"
+	"sync"
 	"time"
 )
 
 var (
 	version = "0.3.8"
-	metrics []byte
 	listen  string
 	getver  bool
+)
+
+var (
+	mu      sync.RWMutex // guards the metrics
+	metrics []byte
 )
 
 func main() {
@@ -45,6 +50,8 @@ func serve() {
 	})
 
 	http.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
+		mu.RLock()
+		defer mu.RUnlock()
 		w.Write(metrics)
 	})
 
@@ -72,7 +79,9 @@ func gather() {
 			panic(fmt.Errorf("could not get traffic: %w", err))
 		}
 
+		mu.Lock()
 		metrics = p.Step(recv, trns)
+		mu.Unlock()
 
 		time.Sleep(time.Second)
 	}
