@@ -1,7 +1,7 @@
-package math_test
+package series_test
 
 import (
-	"netexp/math"
+	"netexp/series"
 	"strconv"
 	"testing"
 )
@@ -20,7 +20,7 @@ func TestMax(t *testing.T) {
 
 	for i, tc := range tests {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
-			got := math.Max(tc.series, tc.head)
+			got := series.Max(tc.series, tc.head)
 			if got != tc.want {
 				t.Errorf("incorrect max; got %d want %d", got, tc.want)
 			}
@@ -42,7 +42,7 @@ func TestRate(t *testing.T) {
 
 	for i, tc := range tests {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
-			got := math.Rate(tc.series, tc.head)
+			got := series.Rate(tc.series, tc.head)
 			if got != tc.want {
 				t.Errorf("incorrect rate; got %d want %d", got, tc.want)
 			}

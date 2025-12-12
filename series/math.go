@@ -1,4 +1,4 @@
-package math
+package series
 
 func Max(series []int64, head int) int64 {
 	var max int64
