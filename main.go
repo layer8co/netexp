@@ -6,13 +6,14 @@ import (
 	"net/http"
 	"netexp/netdev"
 	"netexp/pipeline"
+	"netexp/rcu"
 	"os"
 	"time"
 )
 
 var (
 	version = "0.3.8"
-	metrics []byte
+	metrics rcu.RCU[[]byte]
 	listen  string
 	getver  bool
 )
@@ -45,7 +46,7 @@ func serve() {
 	})
 
 	http.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
-		w.Write(metrics)
+		w.Write(*metrics.Load())
 	})
 
 	go func() {
@@ -72,7 +73,9 @@ func gather() {
 			panic(fmt.Errorf("could not get traffic: %w", err))
 		}
 
-		metrics = p.Step(recv, trns)
+		buf := p.Step(recv, trns)
+
+		metrics.Store(&buf)
 
 		time.Sleep(time.Second)
 	}
