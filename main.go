@@ -13,14 +13,9 @@ import (
 
 var (
 	version = "0.3.8"
+	metrics rcu.RCU[[]byte]
 	listen  string
 	getver  bool
-)
-
-type Metrics []byte
-
-var (
-	rcuMetrics *rcu.RCU[Metrics]
 )
 
 func main() {
@@ -41,11 +36,6 @@ func main() {
 		return
 	}
 
-	// Init rcu
-	rcuMetrics = rcu.New[Metrics]()
-	// Add the first element.
-	rcuMetrics.Rotate()
-
 	serve()
 	gather()
 }
@@ -56,12 +46,7 @@ func serve() {
 	})
 
 	http.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
-		latest, done := rcuMetrics.Latest()
-
-		if latest != nil {
-			w.Write(*latest)
-			done()
-		}
+		w.Write(*metrics.Load())
 	})
 
 	go func() {
@@ -77,8 +62,6 @@ func serve() {
 func gather() {
 	p := pipeline.New([]int{1, 5, 10, 15, 30, 60})
 
-	timer := time.NewTicker(60 * time.Second)
-
 	for {
 		data, err := netdev.ReadNetDev()
 		if err != nil {
@@ -90,16 +73,9 @@ func gather() {
 			panic(fmt.Errorf("could not get traffic: %w", err))
 		}
 
-		m := p.Step(recv, trns)
+		buf := p.Step(recv, trns)
 
-		// Non blocking. It expected to be fast.
-		rcuMetrics.Assign(m)
-
-		select {
-		case <-timer.C:
-			rcuMetrics.Rotate()
-		default:
-		}
+		metrics.Store(&buf)
 
 		time.Sleep(time.Second)
 	}
