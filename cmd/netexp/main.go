@@ -5,7 +5,7 @@
 // - Test netdev.*NetDev.Traffic + $HOST_PROC.
 // - Add proper logging.
 // - Test netdev's logging.
-// - Use layer8co/toolbox/container/ringbuf in netdev instead of []int64 once it's ready.
+// - Once layer8co/toolbox/container/ringbuf is ready, use it in netdev for storing samples instead of the []int64.
 // - Implement a generic bucketed pool in layer8co/toolbox and use that in rcu.*BufferRcu instead of sync.Pool.
 // - Move rcu to layer8co/toolbox.
 

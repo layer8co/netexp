@@ -43,8 +43,8 @@ func (s *TimeSeries) Put(sample int64) {
 	s.Samples[len(s.Samples)-1] = sample
 }
 
-// Rate is only applicaple to cumulative series.
-// It returns the rate of change per second over the last d duration.
+// Rate returns the rate of change per second over the last d duration.
+// It is only applicable to cumulative series.
 //
 // Notes:
 //   - d must be >= s.Interval.
