@@ -73,5 +73,5 @@ netexp_max_5s_trns_burst_bps_over_1m0s 114077
   
 - `netexp_max_{burst-duration}_{direction}_burst_bps_over_{observation-duration}`
 Shows how much the maximum traffic rate observed within specific time windows.
-It basically shows the __The Peak Rates__ of the network interface at small time
+It basically shows __The Peak Rates__ of the network interface at small time
 windows.
