@@ -1,4 +1,4 @@
-# netexp
+# ⇄ netexp
 
 netexp is a Prometheus exporter that provides advanced network usage metrics.
 
@@ -45,4 +45,5 @@ matched interfaces: enp0s31f6, wlp4s0
 - `netexp_max_{burst-duration}_{direction}_burst_bps_over_{observation-duration}`
 Shows how much the maximum traffic rate observed within specific time windows.
 It basically shows the __The Peak Rates__ of the network interface at small.
+
 
