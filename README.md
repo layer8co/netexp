@@ -68,7 +68,7 @@ netexp_max_5s_trns_burst_bps_over_1m0s 114077
 - `netexp_recv_bytes` The total number of bytes of data, that has been recieved
   by the interface. which is in our case: 1443950207
 
-- `netexp_trns_bytes` The total number of bytes of data, that has been recieved
+- `netexp_trns_bytes` The total number of bytes of data, that has been transmitted
   by the interface. which is in our case: 192449225
   
 - `netexp_max_{burst-duration}_{direction}_burst_bps_over_{observation-duration}`
