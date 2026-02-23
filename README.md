@@ -12,7 +12,7 @@ populated by the Linux kernel.
 ## Installation
 
 ### Using go toolchain 
-```go
+```bash
 go install github.com/layer8co/netexp/cmd/netexp@latest
 ```
 
