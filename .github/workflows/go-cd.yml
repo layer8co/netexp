@@ -1,4 +1,4 @@
-name: Nexexp Continues Delivery
+name: Create Release
 
 on:
   workflow_dispatch:
