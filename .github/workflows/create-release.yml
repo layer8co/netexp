@@ -1,32 +1,40 @@
 name: Create Release
 
 on:
-  workflow_dispatch:
   push:
     tags:
-      - v**
+      - v[0-9]+*
 
 jobs:
-  release:
+
+  create-release:
+
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
+
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v7
 
       - name: Set up Go
         uses: actions/setup-go@v7
         with:
-          go-version: '1.25'
+          go-version-file: go.mod
 
       - name: Build
         run: |
-          mkdir -p dist
-          go build -v -o dist/netexp-linux-amd64 ./cmd/netexp
+          mkdir build
+          cd build
+          for arch in amd64 arm64; do
+            go build -v -trimpath -ldflags='-s -w -buildid=' \
+              -o="netexp-linux-$arch" ./cmd/netexp
+          done
+          sha256sum -- * > sha256sums.txt
 
       - name: Create release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: dist/netexp-linux-amd64
-          generate_release_notes: true
+        run: |
+          tag=$GITHUB_REF_NAME
+          gh release create --generate-notes --title="$tag" -- "$tag" build/*
