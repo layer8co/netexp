@@ -1,6 +1,7 @@
 name: Create Release
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - v[0-9]+*
@@ -18,6 +19,22 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Checkout repository
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = push ]; then
+            exit
+          fi
+          tag=$(git tag --sort=-version:refname | head -n1)
+          if [ -z "$tag" ]; then
+            echo 'repo has no tags.' >&2
+            exit 1
+          fi
+          echo "checking out to the latest tag ($tag)"
+          git checkout "$tag"
 
       - name: Set up Go
         uses: actions/setup-go@v7
@@ -36,5 +53,5 @@ jobs:
 
       - name: Create release
         run: |
-          tag=$GITHUB_REF_NAME
+          tag=$(git describe --tags --exact-match)
           gh release create --generate-notes --title="$tag" -- "$tag" build/*
