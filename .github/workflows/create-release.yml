@@ -44,14 +44,16 @@ jobs:
       - name: Build
         run: |
           mkdir build
-          cd build
           for arch in amd64 arm64; do
             go build -v -trimpath -ldflags='-s -w -buildid=' \
-              -o="netexp-linux-$arch" ./cmd/netexp
+              -o="build/netexp-linux-$arch" ./cmd/netexp
           done
+          cd build
           sha256sum -- * > sha256sums.txt
 
       - name: Create release
         run: |
           tag=$(git describe --tags --exact-match)
           gh release create --generate-notes --title="$tag" -- "$tag" build/*
+        env:
+          GH_TOKEN: ${{ github.token }}
