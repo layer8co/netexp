@@ -23,37 +23,70 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Checkout repository
+      - name: Switch to the latest tag if triggered via workflow_dispatch
         run: |
           if [ "$GITHUB_EVENT_NAME" = push ]; then
             exit
           fi
-          tag=$(git tag --sort=-version:refname | head -n1)
-          if [ -z "$tag" ]; then
-            echo 'repo has no tags.' >&2
+          echo 'finding the latest tag'
+          latest_tag=$(git tag --sort=-version:refname | head -n1)
+          if [ -z "$latest_tag" ]; then
+            echo 'repo has no tags' >&2
             exit 1
           fi
-          echo "checking out to the latest tag ($tag)"
-          git checkout "$tag"
+          echo "switching to the latest tag ($latest_tag)"
+          git checkout "$latest_tag"
 
       - name: Set up Go
         uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
 
-      - name: Build
+      - name: Build reproducibly
         run: |
-          mkdir build
+
+          umask 0022
+          mkdir tarballs
+
+          tag=$(git describe --tags --exact-match)
+          commit_time=$(git log -1 --pretty=%ct)
+          export SOURCE_DATE_EPOCH=$commit_time
+
           for arch in amd64 arm64; do
-            go build -v -trimpath -ldflags='-s -w -buildid=' \
-              -o="build/netexp-linux-$arch" ./cmd/netexp
+
+            build=netexp-linux-$arch
+            echo "building $build"
+            mkdir "$build"
+
+            GOOS=linux GOARCH=$arch go build \
+              --trimpath \
+              --buildvcs=false \
+              --ldflags="-s -w --buildid= -X=main.version='$tag'" \
+              -o="$build/netexp" \
+              ./cmd/netexp
+
+            chmod 755 -- "$build/netexp"
+
+            tar \
+              --create \
+              --format=ustar \
+              --sort=name \
+              --owner=0 \
+              --group=0 \
+              --numeric-owner \
+              --mtime="@${SOURCE_DATE_EPOCH:?}" \
+              --use-compress-program='gzip --no-name' \
+              --file="tarballs/$build.tar.gz" \
+              -- "$build"
+
           done
-          cd build
+
+          cd tarballs
           sha256sum -- * > sha256sums.txt
 
       - name: Create release
         run: |
           tag=$(git describe --tags --exact-match)
-          gh release create --generate-notes --title="$tag" -- "$tag" build/*
+          gh release create --generate-notes --title="$tag" -- "$tag" tarballs/*
         env:
           GH_TOKEN: ${{ github.token }}
