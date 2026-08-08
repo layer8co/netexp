@@ -18,7 +18,7 @@ go install github.com/layer8co/netexp/cmd/netexp@latest
 
 ## Usage
 ```bash
-$ netexp --help 
+$ netexp --help
 
 netexp is a Prometheus exporter that provides advanced network usage metrics.
 
@@ -35,7 +35,7 @@ Usage:
     	comma-separated output window durations (default "15s,30s,60s")
 
 $ netexp -listen :9290
-listening on :9298
+listening on :9290
 matched interfaces: enp0s31f6, wlp4s0
 ```
 
@@ -70,7 +70,7 @@ netexp_max_5s_trns_burst_bps_over_1m0s 114077
 
 - `netexp_trns_bytes` The total number of bytes of data, that has been transmitted
   by the interface. which is in our case: 192449225
-  
+
 - `netexp_max_{burst-duration}_{direction}_burst_bps_over_{observation-duration}`
 Shows how much the maximum traffic rate observed within specific time windows.
 It basically shows __The Peak Rates__ of the network interface at small time
