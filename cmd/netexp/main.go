@@ -29,10 +29,19 @@ import (
 
 const (
 	appName  = "netexp"
-	helpText = "netexp is a Prometheus exporter that provides advanced network usage metrics."
+	helpText = "" +
+		"netexp is a Prometheus exporter " +
+		"that provides advanced network usage metrics."
 )
 
+var version = "devel"
+
 var (
+	printVersion = flag.Bool(
+		"version",
+		false,
+		"output version information and exit",
+	)
 	listen = flag.String(
 		"listen",
 		":9298",
@@ -67,6 +76,15 @@ var (
 )
 
 func main() {
+	err := app()
+	if err == nil {
+		return
+	}
+	fmt.Println(err.Error())
+	os.Exit(1)
+}
+
+func app() error {
 
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "%s\n\nUsage:\n", helpText)
@@ -75,9 +93,14 @@ func main() {
 
 	flag.Parse()
 
+	if *printVersion {
+		fmt.Println(version)
+		return nil
+	}
+
 	ifaceRegexp, err := regexp.Compile(*ifaceRegexpFlag)
 	if err != nil {
-		die(fmt.Sprintf("-iface-regexp parse erorr: %s", err))
+		return fmt.Errorf("-iface-regexp parse erorr: %w", err)
 	}
 
 	appNetDev = netdev.New(ifaceRegexp.Match, func(fn func(io.Writer)) {
@@ -99,6 +122,8 @@ func main() {
 	}()
 
 	serveHttp()
+
+	return nil
 }
 
 func serveHttp() error {
@@ -140,18 +165,15 @@ func parseDurations(s string) (out []time.Duration, err error) {
 	return out, nil
 }
 
-func die(s string) {
-	fmt.Println(s)
-	os.Exit(1)
-}
-
 func mustDo(err error) {
 	if err != nil {
-		die(err.Error())
+		panic(err)
 	}
 }
 
 func mustGet[T any](v T, err error) T {
-	mustDo(err)
+	if err != nil {
+		panic(err)
+	}
 	return v
 }
